@@ -16,7 +16,7 @@ export default class Team extends Model<Team> {
     @Column
     project?: string
 
-    // informando o tipo de relacionado que existe com essa tabela
+    // informando o tipo de relacionamento que existe com essa tabela
     @HasMany(() => User)
     users!: User[]
 
