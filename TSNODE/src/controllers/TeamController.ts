@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import User from '../models/UserModel'
+import Team from '../models/TeamModel'
 
-class UserController {
+class TeamController {
   public async index (req: Request, res: Response): Promise<Response> {
     try {
-      const users = await User.findAll()
-      return res.json(users)
+      const teams = await Team.findAll()
+      return res.json(teams)
     } catch (err) {
       return res.json({ erro: err })
     }
@@ -13,8 +13,8 @@ class UserController {
 
   public async store (req: Request, res: Response): Promise<Response> {
     try {
-      const user = await User.create(req.body)
-      return res.json(user)
+      const team = await Team.create(req.body)
+      return res.json(team)
     } catch (err) {
       return res.json({ erro: err })
     }
@@ -22,12 +22,14 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     try {
-      const user = await User.update(req.body, { where: { id: req.params.id } })
-      return res.json(user)
+      const team = await Team.update(req.body, { where: { id: req.params.id } })
+      console.log(team)
+
+      return res.json(team)
     } catch (err) {
       return res.json({ erro: err })
     }
   }
 }
 
-export default new UserController()
+export default new TeamController()
