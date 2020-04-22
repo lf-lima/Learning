@@ -1,3 +1,0 @@
-Porta DB = 5432
-Password Superuser = admin
-
