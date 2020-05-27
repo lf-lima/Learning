@@ -1,7 +1,8 @@
-import { Table, Column, Model, CreatedAt, UpdatedAt } from 'sequelize-typescript'
+import { Table, Column } from 'sequelize-typescript'
+import BaseModel from './base'
 
 @Table
-class User extends Model<User> {
+class User extends BaseModel<User> {
   @Column
   username!: string
 
@@ -10,14 +11,6 @@ class User extends Model<User> {
 
   @Column
   password!: string
-
-  @CreatedAt
-  @Column
-  createdAt!: Date
-
-  @UpdatedAt
-  @Column
-  updatedAt!: Date
 }
 
 export default User
