@@ -3,10 +3,9 @@ import userController from '../controllers/user'
 
 const router = Router()
 
-router.get('/', async (req, res) => {
-  return res.send('<h1> PAGE USERS </H1>')
-})
-
+router.get('/', userController.findAll)
+router.get('/:userId', userController.findById)
 router.post('/', userController.store)
+router.delete('/:userId', userController.delete)
 
 export default router

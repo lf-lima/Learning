@@ -1,4 +1,4 @@
-import { Model, CreatedAt, UpdatedAt, Column, DefaultScope } from 'sequelize-typescript'
+import { Model, CreatedAt, UpdatedAt, Column } from 'sequelize-typescript'
 
 export default class BaseModel<TModel> extends Model<TModel> {
   @Column({
@@ -9,13 +9,26 @@ export default class BaseModel<TModel> extends Model<TModel> {
   id!: number
 
   private errors: string[] = []
+  public hasError = false
 
-  public async getErrors (): Promise<string[]> {
+  public getErrors (): string[] {
     return this.errors
   }
 
-  public async addErrors (err: string): Promise<void> {
-    this.errors.push(err)
+  public addErrors (err: string | string[]): void {
+    if (Array.isArray(err)) {
+      err.map((msg) => { this.errors.push(msg) })
+    } else {
+      this.errors.push(err)
+    }
+
+    this.hasError = true
+  }
+
+  public isEmpty (): boolean {
+    if (!this.id) return true
+
+    return false
   }
 
   @CreatedAt
