@@ -6,11 +6,15 @@ interface IUserData {
   password?: string
 }
 
+interface IFindUserOptions {
+  returnPassword?: boolean
+}
+
 class UserRepository {
   public async store (data: IUserData) {
     try {
       const userCreated = await User.create(data)
-      const user = await this.findById(userCreated.id) // as User para o Objeto ser somento do tipo User
+      const user = await this.findById(userCreated.id, { returnPassword: false })
       return user
     } catch (error) {
       throw new Error(error)
@@ -20,43 +24,86 @@ class UserRepository {
   public async update (userId: number, data: IUserData) {
     try {
       await User.update(data, { where: { id: userId } })
-      const user = await this.findById(userId)
+      const user = await this.findById(userId, { returnPassword: false })
       return user
     } catch (error) {
       throw new Error(error)
     }
   }
 
-  public async findByEmail (email: string) {
+  public async findByEmail (email: string, options?: IFindUserOptions) {
     try {
-      const user = await User.findOne({ where: { email } }) as User
+      let user = new User()
+      if (options) {
+        if (!options.returnPassword) {
+          user = await User.findOne({
+            where: { email },
+            attributes: { exclude: ['password'] }
+          }) as User
+        }
+      } else {
+        user = await User.findOne({ where: { email } }) as User
+      }
+
       return user
     } catch (error) {
       throw new Error(error)
     }
   }
 
-  public async findByUsername (username: string) {
+  public async findByUsername (username: string, options?: IFindUserOptions) {
     try {
-      const user = await User.findOne({ where: { username } }) as User
+      let user = new User()
+      if (options) {
+        if (!options.returnPassword) {
+          user = await User.findOne({
+            where: { username },
+            attributes: { exclude: ['password'] }
+          }) as User
+        }
+      } else {
+        user = await User.findOne({ where: { username } }) as User
+      }
+
       return user
     } catch (error) {
       throw new Error(error)
     }
   }
 
-  public async findById (userId: number) {
+  public async findById (userId: number, options?: IFindUserOptions) {
     try {
-      const user = await User.findByPk(userId) as User
+      let user = new User()
+      if (options) {
+        if (!options.returnPassword) {
+          user = await User.findOne({
+            where: { id: userId },
+            attributes: { exclude: ['password'] }
+          }) as User
+        }
+      } else {
+        user = await User.findOne({ where: { id: userId } }) as User
+      }
+
       return user
     } catch (error) {
       throw new Error(error)
     }
   }
 
-  public async findAll () {
+  public async findAll (options?: IFindUserOptions) {
     try {
-      const users = await User.findAll()
+      let users: User[] = []
+      if (options) {
+        if (!options.returnPassword) {
+          users = await User.findAll({
+            attributes: { exclude: ['password'] }
+          }) as User[]
+        }
+      } else {
+        users = await User.findAll() as User[]
+      }
+
       return users
     } catch (error) {
       throw new Error(error)

@@ -1,9 +1,17 @@
 import { Table, Column, DefaultScope } from 'sequelize-typescript'
 import BaseModel from './base'
 import validator from 'validator'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import authConfig from '../../config/auth'
+
+interface ITokenPayload {
+  username: string
+  email: string
+}
 
 @DefaultScope({
-  attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+  attributes: { exclude: ['createdAt', 'updatedAt'] }
 })
 @Table
 class User extends BaseModel<User> {
@@ -44,6 +52,27 @@ class User extends BaseModel<User> {
     if (this.hasError) return false
 
     return true
+  }
+
+  public async hashPassword (password: string): Promise<string> {
+    const saltRounds = 10
+    const hashedPassword = bcrypt.hash(password, saltRounds).then((hash) => hash)
+    return hashedPassword
+  }
+
+  public async checkPassword (passwordBody: string, passwordDb: string): Promise<boolean> {
+    const response = bcrypt.compare(passwordBody, passwordDb).then((result) => result)
+
+    if (!response) this.addErrors('Invalid Password')
+
+    return response
+  }
+
+  public async genToken (payload: ITokenPayload): Promise<string> {
+    const token = jwt.sign(payload, authConfig.secret, {
+      expiresIn: 86400 // expira em um dia
+    })
+    return token
   }
 }
 

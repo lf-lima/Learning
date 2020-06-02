@@ -18,7 +18,6 @@ class UserService {
   public async store ({ username, email, password, confirmPassword }: IUserDataBody) {
     try {
       const user = new User()
-
       await user.validateUsername(username)
       await user.validateEmail(email)
       await user.validatePassword(password, confirmPassword)
@@ -33,7 +32,7 @@ class UserService {
       const data = {
         username,
         email,
-        password
+        password: await user.hashPassword(password)
       }
 
       const responseRepository = await userRepository.store(data)
@@ -45,20 +44,24 @@ class UserService {
 
   public async update (userId: number, { username, email, password, confirmPassword }: IUserDataBody) {
     try {
-      const user = await userRepository.findById(userId) as User || new User()
+      const user = await userRepository.findById(userId) || new User()
 
       if (user.isEmpty()) {
         user.addErrors('User not exists')
         return user
       }
-
+      // arrumar validacao, e add mais uma validacao de verificar se ja existem users com esse email ou username
       const data: IUserData = {}
 
       if (username) { if (await user.validateUsername(username)) data.username = username }
 
       if (email) { if (await user.validateEmail(email)) data.email = email }
 
-      if (password) { if (await user.validatePassword(password, confirmPassword)) data.password = password }
+      if (password) {
+        if (await user.validatePassword(password, confirmPassword)) {
+          data.password = await user.hashPassword(password)
+        }
+      }
 
       if (user.hasError) return user
 
@@ -71,7 +74,7 @@ class UserService {
 
   public async findAll () {
     try {
-      const responseRepository = await userRepository.findAll()
+      const responseRepository = await userRepository.findAll({ returnPassword: false })
       return responseRepository
     } catch (error) {
       throw new Error(error)
@@ -80,7 +83,7 @@ class UserService {
 
   public async findById (userId: number) {
     try {
-      const user = await userRepository.findById(userId) ||
+      const user = await userRepository.findById(userId, { returnPassword: false }) ||
                    new User()
 
       if (user.isEmpty()) user.addErrors('User not exists')
@@ -93,7 +96,7 @@ class UserService {
 
   public async delete (userId: number) {
     try {
-      const user = await userRepository.findById(userId) ||
+      const user = await userRepository.findById(userId, { returnPassword: false }) ||
                    new User()
 
       if (user.isEmpty()) {

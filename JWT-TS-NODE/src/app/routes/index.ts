@@ -1,6 +1,7 @@
 import { Router } from 'express'
 // import das rotas
 import userRoutes from './user'
+import loginRoutes from './login'
 
 const router = Router()
 
@@ -10,5 +11,6 @@ router.get('/', async (req, res) => {
 })
 
 router.use('/users', userRoutes)
+router.use('/login', loginRoutes)
 
 export default router
