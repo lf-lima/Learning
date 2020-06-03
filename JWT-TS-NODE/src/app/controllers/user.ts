@@ -6,7 +6,9 @@ class UserController {
     try {
       const responseService = await userService.store(req.body)
 
-      if (responseService.hasError) return res.status(400).json(responseService.getErrors())
+      if (responseService.hasError) {
+        return res.status(400).json(responseService.getErrors())
+      }
 
       return res.status(200).json(responseService)
     } catch (error) {
@@ -18,7 +20,9 @@ class UserController {
     try {
       const responseService = await userService.update(Number(req.params.userId), req.body)
 
-      if (responseService.hasError) return res.status(400).json(responseService.getErrors())
+      if (responseService.hasError) {
+        return res.status(400).json(responseService.getErrors())
+      }
 
       return res.status(200).json(responseService)
     } catch (error) {
@@ -39,7 +43,9 @@ class UserController {
     try {
       const responseService = await userService.findById(Number(req.params.userId))
 
-      if (responseService.hasError) return res.status(400).json(responseService.getErrors())
+      if (responseService.hasError) {
+        return res.status(400).json(responseService.getErrors())
+      }
 
       return res.status(200).json(responseService)
     } catch (error) {
@@ -51,7 +57,9 @@ class UserController {
     try {
       const responseService = await userService.delete(Number(req.params.userId))
 
-      if (responseService.hasError) return res.status(400).json(responseService.getErrors())
+      if (responseService.hasError) {
+        return res.status(400).json(responseService.getErrors())
+      }
 
       return res.status(204).json()
     } catch (error) {

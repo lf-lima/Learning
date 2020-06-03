@@ -2,8 +2,7 @@ import userRepository from '../repository/user'
 import User from '../infra/models/user'
 
 interface ILoginData {
-  username?: string
-  email?: string
+  userLogin: string
   password: string
 }
 
@@ -14,12 +13,10 @@ interface ILoginResponse {
 }
 
 class LoginService {
-  public async authenticate ({ username, email, password }: ILoginData): Promise<ILoginResponse> {
-    let user = new User()
-
-    if (username) user = await userRepository.findByUsername(username) || new User()
-
-    if (email) user = await userRepository.findByEmail(email) || new User()
+  public async authenticate ({ userLogin, password }: ILoginData): Promise<ILoginResponse> {
+    const user = await userRepository.findByUsername(userLogin) ||
+                 await userRepository.findByEmail(userLogin) ||
+                 new User()
 
     if (user.isEmpty()) {
       user.addErrors('User not exists')

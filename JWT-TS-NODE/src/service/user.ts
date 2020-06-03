@@ -24,8 +24,12 @@ class UserService {
 
       if (user.hasError) return user
 
-      if (await userRepository.findByEmail(email)) user.addErrors('Email already exists')
-      if (await userRepository.findByUsername(username)) user.addErrors('Username already exists')
+      if (await userRepository.findByEmail(email)) {
+        user.addErrors('Email already exists')
+      }
+      if (await userRepository.findByUsername(username)) {
+        user.addErrors('Username already exists')
+      }
 
       if (user.hasError) return user
 
@@ -53,9 +57,13 @@ class UserService {
       // arrumar validacao, e add mais uma validacao de verificar se ja existem users com esse email ou username
       const data: IUserData = {}
 
-      if (username) { if (await user.validateUsername(username)) data.username = username }
+      if (username) {
+        if (await user.validateUsername(username)) data.username = username
+      }
 
-      if (email) { if (await user.validateEmail(email)) data.email = email }
+      if (email) {
+        if (await user.validateEmail(email)) data.email = email
+      }
 
       if (password) {
         if (await user.validatePassword(password, confirmPassword)) {
