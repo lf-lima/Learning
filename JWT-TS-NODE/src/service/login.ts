@@ -27,7 +27,11 @@ class LoginService {
 
     if (user.hasError) return { auth: false, errors: user.getErrors() }
 
-    const token = await user.genToken({ username: user.username, email: user.email })
+    const token = await user.genToken({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    })
 
     return { auth: true, token }
   }

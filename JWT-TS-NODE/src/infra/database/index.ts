@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript'
 import user from '../models/user'
+import post from '../models/post'
 
 const sequelize = new Sequelize({
   database: 'db_jwt_ts_node',
@@ -8,7 +9,7 @@ const sequelize = new Sequelize({
   username: 'root',
   password: 'root',
   storage: ':memory:',
-  models: [user],
+  models: [user, post],
   define: {
     underscored: true,
     timestamps: true,

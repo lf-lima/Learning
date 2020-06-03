@@ -1,11 +1,13 @@
-import { Table, Column, DefaultScope } from 'sequelize-typescript'
+import { Table, Column, DefaultScope, HasMany } from 'sequelize-typescript'
 import BaseModel from './base'
+import Post from './post'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import authConfig from '../../config/auth'
 
 interface ITokenPayload {
+  id: number
   username: string
   email: string
 }
@@ -14,7 +16,7 @@ interface ITokenPayload {
   attributes: { exclude: ['createdAt', 'updatedAt'] }
 })
 @Table
-class User extends BaseModel<User> {
+export default class User extends BaseModel<User> {
   @Column
   username!: string
 
@@ -23,6 +25,9 @@ class User extends BaseModel<User> {
 
   @Column
   password!: string
+
+  @HasMany(() => Post)
+  posts!: Post[]
 
   public async validateEmail (email: string): Promise<boolean> {
     if (!validator.isEmail(email)) this.addErrors('Invalid Email')
@@ -75,5 +80,3 @@ class User extends BaseModel<User> {
     return token
   }
 }
-
-export default User
