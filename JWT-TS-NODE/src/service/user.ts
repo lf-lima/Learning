@@ -58,14 +58,31 @@ class UserService {
       const data: IUserData = {}
 
       if (username) {
-        if (await user.validateUsername(username)) data.username = username
+        if (await user.validateUsername(username)) {
+          if (await userRepository.findByUsername(username) && user.username !== username) {
+            user.addErrors('Username already exists')
+          } else {
+            data.username = username
+          }
+        }
       }
 
       if (email) {
-        if (await user.validateEmail(email)) data.email = email
+        console.log('entra')
+        console.log(await user.validateEmail(email))
+
+        if (await user.validateEmail(email)) {
+          console.log('valida')
+
+          if (await userRepository.findByEmail(email) && user.email !== email) {
+            user.addErrors('Email already exists')
+          } else {
+            data.email = email
+          }
+        }
       }
 
-      if (password) {
+      if (password || password === '') {
         if (await user.validatePassword(password, confirmPassword)) {
           data.password = await user.hashPassword(password)
         }
