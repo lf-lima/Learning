@@ -1,4 +1,5 @@
 import User from '../infra/models/user'
+import Post from '../infra/models/post'
 
 interface IUserData {
   username?: string
@@ -38,11 +39,15 @@ class UserRepository {
         if (!options.returnPassword) {
           user = await User.findOne({
             where: { email },
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
+            include: [Post]
           }) as User
         }
       } else {
-        user = await User.findOne({ where: { email } }) as User
+        user = await User.findOne({
+          where: { email },
+          include: [Post]
+        }) as User
       }
 
       return user
@@ -58,11 +63,15 @@ class UserRepository {
         if (!options.returnPassword) {
           user = await User.findOne({
             where: { username },
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
+            include: [Post]
           }) as User
         }
       } else {
-        user = await User.findOne({ where: { username } }) as User
+        user = await User.findOne({
+          where: { username },
+          include: [Post]
+        }) as User
       }
 
       return user
@@ -78,11 +87,15 @@ class UserRepository {
         if (!options.returnPassword) {
           user = await User.findOne({
             where: { id: userId },
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
+            include: [Post]
           }) as User
         }
       } else {
-        user = await User.findOne({ where: { id: userId } }) as User
+        user = await User.findOne({
+          where: { id: userId },
+          include: [Post]
+        }) as User
       }
 
       return user
@@ -97,11 +110,12 @@ class UserRepository {
       if (options) {
         if (!options.returnPassword) {
           users = await User.findAll({
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
+            include: [Post]
           }) as User[]
         }
       } else {
-        users = await User.findAll() as User[]
+        users = await User.findAll({ include: [Post] }) as User[]
       }
 
       return users

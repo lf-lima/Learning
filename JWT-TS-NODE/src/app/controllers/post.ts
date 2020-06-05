@@ -6,6 +6,8 @@ class PostController {
     try {
       const { title, description, userId } = req.body
 
+      console.log(req.user)
+
       const data = {
         title,
         description,
