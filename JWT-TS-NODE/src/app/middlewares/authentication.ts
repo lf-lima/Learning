@@ -8,18 +8,34 @@ interface ITokenPayload {
   email: string
 }
 
-export default (req: Request, res: Response, next: NextFunction): void => {
+export default (req: Request, res: Response, next: NextFunction): Response | void => {
   const authHeader = req.headers.authorization
-  console.log(authHeader)
 
-  const parts = authHeader?.split('') as string[]
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Token not provided' })
+  }
 
-  const scheme = parts[0]
-  const token = parts[1]
+  const parts = authHeader?.split(' ') as string[]
 
-  const decoded = jwt.verify(token, authConfig.secret)
+  if (parts.length !== 2) {
+    return res.status(401).json({ error: 'Token error' })
+  }
 
-  req.user = decoded
+  const [scheme, token] = parts
 
-  next()
+  if (scheme !== 'Bearer') {
+    return res.status(401).json({ error: 'Token malformatted' })
+  }
+
+  const tokenParts = token.split('.') as string[]
+
+  if (tokenParts.length !== 3) {
+    return res.status(401).json({ error: 'Token malformatted' })
+  }
+
+  const payload = jwt.verify(token, authConfig.secret) as ITokenPayload
+
+  req.user = payload
+
+  return next()
 }

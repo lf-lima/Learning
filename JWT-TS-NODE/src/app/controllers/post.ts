@@ -4,14 +4,12 @@ import postService from '../../service/post'
 class PostController {
   async store (req: Request, res: Response) {
     try {
-      const { title, description, userId } = req.body
-
-      console.log(req.user)
+      const { title, description } = req.body
 
       const data = {
         title,
         description,
-        userId
+        userId: req.user.id
       }
 
       const responseService = await postService.store(data)
