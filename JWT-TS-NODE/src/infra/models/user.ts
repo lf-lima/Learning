@@ -32,9 +32,9 @@ export default class User extends BaseModel<User> {
   public async validateEmail (email: string): Promise<boolean> {
     if (!validator.isEmail(email)) this.addErrors('Invalid Email')
 
-    if (this.hasError) return true
+    if (this.hasError) return false
 
-    return false
+    return true
   }
 
   public async validateUsername (username: string): Promise<boolean> {
