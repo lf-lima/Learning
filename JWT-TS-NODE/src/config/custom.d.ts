@@ -1,11 +1,9 @@
-interface ITokenPayload {
-  id: number
-  username: string
-  email: string
-}
+import User from '../infra/models/user'
 
-declare namespace Express {
-  export interface Request {
-     user: ITokenPayload
+declare global {
+  namespace Express {
+      export interface Request {
+          user: User;
+      }
   }
 }

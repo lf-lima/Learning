@@ -18,7 +18,7 @@ class UserController {
 
   public async update (req: Request, res: Response) {
     try {
-      const responseService = await userService.update(req.user.id, req.body)
+      const responseService = await userService.update(req.user, req.body)
 
       if (responseService.hasError) {
         return res.status(400).json(responseService.getErrors())
@@ -55,7 +55,7 @@ class UserController {
 
   public async delete (req: Request, res: Response) {
     try {
-      const responseService = await userService.delete(req.user.id)
+      const responseService = await userService.delete(req.user)
 
       if (responseService.hasError) {
         return res.status(400).json(responseService.getErrors())

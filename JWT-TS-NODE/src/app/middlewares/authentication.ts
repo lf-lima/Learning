@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import authConfig from '../../config/auth'
 import jwt from 'jsonwebtoken'
+import userRepository from '../../repository/user'
+import User from '../../infra/models/user'
 
 interface ITokenPayload {
   id: number
@@ -8,7 +10,7 @@ interface ITokenPayload {
   email: string
 }
 
-export default (req: Request, res: Response, next: NextFunction): Response | void => {
+export default async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
@@ -35,7 +37,13 @@ export default (req: Request, res: Response, next: NextFunction): Response | voi
 
   const payload = jwt.verify(token, authConfig.secret) as ITokenPayload
 
-  req.user = payload
+  const user = await userRepository.findById(payload.id, { returnPassword: false }) || new User()
+
+  if (user.isEmpty()) {
+    return res.status(400).json({ error: 'User not exists' })
+  }
+
+  req.user = user
 
   return next()
 }

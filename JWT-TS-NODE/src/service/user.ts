@@ -46,15 +46,8 @@ class UserService {
     }
   }
 
-  public async update (userId: number, { username, email, password, confirmPassword }: IUserDataBody) {
+  public async update (user: User, { username, email, password, confirmPassword }: IUserDataBody) {
     try {
-      const user = await userRepository.findById(userId) || new User()
-
-      if (user.isEmpty()) {
-        user.addErrors('User not exists')
-        return user
-      }
-      // arrumar validacao, e add mais uma validacao de verificar se ja existem users com esse email ou username
       const data: IUserData = {}
 
       if (username) {
@@ -68,12 +61,7 @@ class UserService {
       }
 
       if (email) {
-        console.log('entra')
-        console.log(await user.validateEmail(email))
-
         if (await user.validateEmail(email)) {
-          console.log('valida')
-
           if (await userRepository.findByEmail(email) && user.email !== email) {
             user.addErrors('Email already exists')
           } else {
@@ -90,7 +78,7 @@ class UserService {
 
       if (user.hasError) return user
 
-      const responseRepository = await userRepository.update(userId, data)
+      const responseRepository = await userRepository.update(user.id, data)
       return responseRepository
     } catch (error) {
       throw new Error(error)
@@ -119,18 +107,9 @@ class UserService {
     }
   }
 
-  public async delete (userId: number) {
+  public async delete (user: User) {
     try {
-      const user = await userRepository.findById(userId, { returnPassword: false }) ||
-                   new User()
-
-      if (user.isEmpty()) {
-        user.addErrors('User not exists')
-        return user
-      }
-
-      await userRepository.delete(userId)
-
+      await userRepository.delete(user.id)
       return user
     } catch (error) {
       throw new Error(error)
