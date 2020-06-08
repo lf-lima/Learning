@@ -4,15 +4,12 @@ import postService from '../../service/post'
 class PostController {
   async store (req: Request, res: Response) {
     try {
-      const { title, description } = req.body
+      const responseService = await postService.store(req.user.id, req.body)
 
-      const data = {
-        title,
-        description,
-        userId: req.user.id
+      if (responseService.hasError) {
+        return res.status(400).json(responseService.getErrors())
       }
 
-      const responseService = await postService.store(data)
       return res.status(200).json(responseService)
     } catch (error) {
       return res.status(500).json({ error: 'Server Internal Error! ' })

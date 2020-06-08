@@ -16,4 +16,24 @@ export default class Post extends BaseModel<Post> {
 
   @BelongsTo(() => User)
   user!: User
+
+  async validateTitle (title: string): Promise<boolean> {
+    if (title.length <= 1) {
+      this.addErrors('Title too short')
+    }
+
+    if (this.hasError) return false
+
+    return true
+  }
+
+  async validateDescription (description: string): Promise<boolean> {
+    if (description.length <= 1) {
+      this.addErrors('Description too short')
+    }
+
+    if (this.hasError) return false
+
+    return true
+  }
 }

@@ -3,13 +3,23 @@ import Post from '../infra/models/post'
 interface IPostData {
   title: string
   description: string
-  userId: number
 }
 
 class PostRepository {
   async store (data: IPostData) {
     try {
-      const post = await Post.create(data)
+      const postCreated = await Post.create(data)
+
+      const post = await this.findById(postCreated.id)
+      return post
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  async findById (postId: number) {
+    try {
+      const post = await Post.findByPk(postId) as Post
       return post
     } catch (error) {
       throw new Error(error)
