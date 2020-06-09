@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import postService from '../../service/post'
 
 class PostController {
-  async store (req: Request, res: Response) {
+  public async store (req: Request, res: Response) {
     try {
       const responseService = await postService.store(req.user.id, req.body)
 

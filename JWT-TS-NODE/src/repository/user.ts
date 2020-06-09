@@ -36,7 +36,7 @@ class UserRepository {
     try {
       let user = new User()
       if (options) {
-        if (!options.returnPassword) {
+        if (options.returnPassword === false) {
           user = await User.findOne({
             where: { email },
             attributes: { exclude: ['password'] },
@@ -60,7 +60,7 @@ class UserRepository {
     try {
       let user = new User()
       if (options) {
-        if (!options.returnPassword) {
+        if (options.returnPassword === false) {
           user = await User.findOne({
             where: { username },
             attributes: { exclude: ['password'] },
@@ -84,7 +84,7 @@ class UserRepository {
     try {
       let user = new User()
       if (options) {
-        if (!options.returnPassword) {
+        if (options.returnPassword === false) {
           user = await User.findOne({
             where: { id: userId },
             attributes: { exclude: ['password'] },
@@ -108,7 +108,7 @@ class UserRepository {
     try {
       let users: User[] = []
       if (options) {
-        if (!options.returnPassword) {
+        if (options.returnPassword === false) {
           users = await User.findAll({
             attributes: { exclude: ['password'] },
             include: [Post]

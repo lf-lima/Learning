@@ -7,7 +7,7 @@ interface IPostData {
 }
 
 class PostService {
-  async store (userId: number, { title, description }: IPostData) {
+  public async store (userId: number, { title, description }: IPostData) {
     try {
       const post = new Post()
 
