@@ -1,7 +1,14 @@
 import userRepository from '../repository/user'
 import User from '../infra/models/user'
 
-interface UserData {
+interface UserDataStore {
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+interface UserDataUpdate {
   username?: string
   email?: string
   password?: string
@@ -9,7 +16,7 @@ interface UserData {
 }
 
 class UserService {
-  public async store ({ username, email, password, confirmPassword }: UserData) {
+  public async store ({ username, email, password, confirmPassword }: UserDataStore) {
     try {
       const user = new User()
       await user.validateUsername(username)
@@ -40,9 +47,9 @@ class UserService {
     }
   }
 
-  public async update (user: User, { username, email, password, confirmPassword }: UserData) {
+  public async update (user: User, { username, email, password, confirmPassword }: UserDataUpdate) {
     try {
-      const data: UserData = {}
+      const data: UserDataUpdate = {}
 
       if (username) {
         if (await user.validateUsername(username)) {

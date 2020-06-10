@@ -37,7 +37,6 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
     }
 
     const payload = jwt.verify(token, authConfig.secret) as TokenPayload
-
     const user = await userRepository.findById(payload.id, { returnPassword: false }) || new User()
 
     if (user.isEmpty()) {
@@ -48,6 +47,6 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
 
     return next()
   } catch (error) {
-    return res.status(500).json({ errror: 'Server Internal Error' })
+    return res.status(401).json({ error: 'Not authorized, redo your login' })
   }
 }
