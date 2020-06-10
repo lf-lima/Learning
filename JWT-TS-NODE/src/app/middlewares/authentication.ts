@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import userRepository from '../../repository/user'
 import User from '../../infra/models/user'
 
-interface ITokenPayload {
+interface TokenPayload {
   id: number
   username: string
   email: string
@@ -36,7 +36,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
       return res.status(401).json({ error: 'Token malformatted' })
     }
 
-    const payload = jwt.verify(token, authConfig.secret) as ITokenPayload
+    const payload = jwt.verify(token, authConfig.secret) as TokenPayload
 
     const user = await userRepository.findById(payload.id, { returnPassword: false }) || new User()
 

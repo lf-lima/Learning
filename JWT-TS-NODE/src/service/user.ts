@@ -1,21 +1,15 @@
 import userRepository from '../repository/user'
 import User from '../infra/models/user'
 
-interface IUserDataBody {
-  username: string
-  email: string
-  password: string
-  confirmPassword: string
-}
-
-interface IUserData {
+interface UserData {
   username?: string
   email?: string
   password?: string
+  confirmPassword?: string
 }
 
 class UserService {
-  public async store ({ username, email, password, confirmPassword }: IUserDataBody) {
+  public async store ({ username, email, password, confirmPassword }: UserData) {
     try {
       const user = new User()
       await user.validateUsername(username)
@@ -46,9 +40,9 @@ class UserService {
     }
   }
 
-  public async update (user: User, { username, email, password, confirmPassword }: IUserDataBody) {
+  public async update (user: User, { username, email, password, confirmPassword }: UserData) {
     try {
-      const data: IUserData = {}
+      const data: UserData = {}
 
       if (username) {
         if (await user.validateUsername(username)) {
@@ -70,7 +64,7 @@ class UserService {
         }
       }
 
-      if (password || password === '') {
+      if (password && confirmPassword) {
         if (await user.validatePassword(password, confirmPassword)) {
           data.password = await user.hashPassword(password)
         }

@@ -1,19 +1,19 @@
 import userRepository from '../repository/user'
 import User from '../infra/models/user'
 
-interface ILoginData {
+interface LoginData {
   userLogin: string
   password: string
 }
 
-interface ILoginResponse {
+interface LoginResponse {
   auth: boolean
   errors?: string[]
   token?: string
 }
 
 class LoginService {
-  public async authenticate ({ userLogin, password }: ILoginData): Promise<ILoginResponse> {
+  public async authenticate ({ userLogin, password }: LoginData): Promise<LoginResponse> {
     const user = await userRepository.findByUsername(userLogin) ||
                  await userRepository.findByEmail(userLogin) ||
                  new User()

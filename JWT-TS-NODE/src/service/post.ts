@@ -1,13 +1,13 @@
 import postRepository from '../repository/post'
 import Post from '../infra/models/post'
 
-interface IPostData {
+interface PostData {
   title: string
   description: string
 }
 
 class PostService {
-  public async store (userId: number, { title, description }: IPostData) {
+  public async store (userId: number, { title, description }: PostData) {
     try {
       const post = new Post()
 

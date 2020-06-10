@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import authConfig from '../../config/auth'
 
-interface ITokenPayload {
+interface TokenPayload {
   id: number
   username: string
   email: string
@@ -29,34 +29,47 @@ export default class User extends BaseModel<User> {
   @HasMany(() => Post)
   posts!: Post[]
 
-  public async validateEmail (email: string): Promise<boolean> {
-    if (!validator.isEmail(email)) this.addErrors('Invalid Email')
+  public async validateEmail (email: string | undefined): Promise<boolean> {
+    if (email) {
+      if (!validator.isEmail(email)) this.addErrors('Invalid Email')
 
-    if (this.hasError) return false
+      if (this.hasError) return false
 
-    return true
+      return true
+    } else {
+      this.addErrors('Email is required')
+      return false
+    }
   }
 
-  public async validateUsername (username: string): Promise<boolean> {
-    if (username.length <= 4) this.addErrors('Username too short')
+  public async validateUsername (username: string | undefined): Promise<boolean> {
+    if (username) {
+      if (username.length <= 4) this.addErrors('Username too short')
 
-    if (username.length > 16) this.addErrors('Username too long')
+      if (username.length > 16) this.addErrors('Username too long')
 
-    if (this.hasError) return false
+      if (this.hasError) return false
 
-    return true
+      return true
+    } else {
+      this.addErrors('Username is required')
+    }
   }
 
-  public async validatePassword (password: string, confirmPassword: string): Promise<boolean> {
-    if (password !== confirmPassword) this.addErrors('Different passwords')
+  public async validatePassword (password: string | undefined, confirmPassword: string | undefined): Promise<boolean> {
+    if (password && confirmPassword) {
+      if (password !== confirmPassword) this.addErrors('Different passwords')
 
-    if (password.length < 4) this.addErrors('Password too short')
+      if (password.length < 4) this.addErrors('Password too short')
 
-    if (password.length > 16) this.addErrors('Password too long')
+      if (password.length > 16) this.addErrors('Password too long')
 
-    if (this.hasError) return false
+      if (this.hasError) return false
 
-    return true
+      return true
+    } else {
+      this
+    }
   }
 
   public async hashPassword (password: string): Promise<string> {
@@ -73,7 +86,7 @@ export default class User extends BaseModel<User> {
     return response
   }
 
-  public async genToken (payload: ITokenPayload): Promise<string> {
+  public async genToken (payload: TokenPayload): Promise<string> {
     const token = jwt.sign(payload, authConfig.secret, {
       expiresIn: 86400 // expira em um dia
     })

@@ -1,12 +1,12 @@
 import Post from '../infra/models/post'
 
-interface IPostData {
+interface PostData {
   title: string
   description: string
 }
 
 class PostRepository {
-  async store (data: IPostData) {
+  async store (data: PostData) {
     try {
       const postCreated = await Post.create(data)
 

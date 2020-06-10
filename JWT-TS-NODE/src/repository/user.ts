@@ -1,18 +1,18 @@
 import User from '../infra/models/user'
 import Post from '../infra/models/post'
 
-interface IUserData {
+interface UserData {
   username?: string
   email?: string
   password?: string
 }
 
-interface IFindUserOptions {
+interface FindUserOptions {
   returnPassword?: boolean
 }
 
 class UserRepository {
-  public async store (data: IUserData) {
+  public async store (data: UserData) {
     try {
       const userCreated = await User.create(data)
       const user = await this.findById(userCreated.id, { returnPassword: false })
@@ -22,7 +22,7 @@ class UserRepository {
     }
   }
 
-  public async update (userId: number, data: IUserData) {
+  public async update (userId: number, data: UserData) {
     try {
       await User.update(data, { where: { id: userId } })
       const user = await this.findById(userId, { returnPassword: false })
@@ -32,7 +32,7 @@ class UserRepository {
     }
   }
 
-  public async findByEmail (email: string, options?: IFindUserOptions) {
+  public async findByEmail (email: string, options?: FindUserOptions) {
     try {
       let user = new User()
       if (options) {
@@ -56,7 +56,7 @@ class UserRepository {
     }
   }
 
-  public async findByUsername (username: string, options?: IFindUserOptions) {
+  public async findByUsername (username: string, options?: FindUserOptions) {
     try {
       let user = new User()
       if (options) {
@@ -80,7 +80,7 @@ class UserRepository {
     }
   }
 
-  public async findById (userId: number, options?: IFindUserOptions) {
+  public async findById (userId: number, options?: FindUserOptions) {
     try {
       let user = new User()
       if (options) {
@@ -104,7 +104,7 @@ class UserRepository {
     }
   }
 
-  public async findAll (options?: IFindUserOptions) {
+  public async findAll (options?: FindUserOptions) {
     try {
       let users: User[] = []
       if (options) {
