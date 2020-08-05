@@ -1,8 +1,8 @@
-import { Column, Table } from 'sequelize-typescript'
+import { Column, Table, Model } from 'sequelize-typescript'
 import { IUser } from '../../1-domain/entities/iUser'
 
 @Table
-export class User implements IUser {
+export default class User extends Model<User> implements IUser {
   @Column
   email!: string
 

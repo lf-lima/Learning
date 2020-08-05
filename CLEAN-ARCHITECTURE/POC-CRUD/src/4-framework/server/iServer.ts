@@ -11,7 +11,11 @@ export interface IServer {
   middlewares(): void
 }
 
-export class ServerExpress implements IServer {
+export interface IServerExpress extends IServer{
+  app: express.Application
+}
+
+export class ServerExpress implements IServerExpress {
   public app: express.Application
 
   constructor () {
