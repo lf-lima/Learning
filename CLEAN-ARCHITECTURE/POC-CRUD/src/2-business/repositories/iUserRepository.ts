@@ -1,9 +1,9 @@
-import { User } from '../../4-framework/models/user'
+import { IUser } from '../../1-domain/entities/iUser'
 
 export interface IUserRepository {
-  create(data: { email: string, password: string}): Promise<User>
-  update(data: { email?: string, password?: string}): Promise<User>
-  delete(): Promise<void>
-  findById(userId: number): Promise<User>
-  findAll(): Promise<User[]>
+  create(data: { email: string, password: string}): Promise<IUser>
+  update(userId: number, data: { email?: string, password?: string}): Promise<IUser>
+  delete(userId: number): Promise<void>
+  findAll(): Promise<IUser[]>
+  findById(userId: number): Promise<IUser>
 }

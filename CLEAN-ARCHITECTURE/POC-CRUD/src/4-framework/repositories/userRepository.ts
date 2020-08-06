@@ -1,27 +1,53 @@
 import { IUserRepository } from '../../2-business/repositories/iUserRepository'
+import { IUser } from '../../1-domain/entities/iUser'
+import User from '../models/sequelize/user.model'
 
-// export class UserRepository implements IUserRepository {
-//   async create (data: { email: string, password: string }) {
-//     try {
+export class UserRepository implements IUserRepository {
+  public userRepository!: typeof User
 
-//     } catch (error) {
-//       throw new Error(error)
-//     }
-//   }
+  constructor (repo: typeof User) {
+    this.userRepository = repo
+  }
 
-//   async update (data: { email?: string, password?: string }) {
+  async create (data: { email: string, password: string}): Promise<IUser> {
+    try {
+      const { id } = await this.userRepository.create(data)
+      return await this.findById(id)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 
-//   }
+  async update (userId: number, data: { email?: string, password?: string}): Promise<IUser> {
+    try {
+      await this.userRepository.update(data, { where: { id: userId } })
+      return await this.findById(userId)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 
-//   async delete () {
+  async delete (userId: number): Promise<void> {
+    try {
+      await this.userRepository.destroy({ where: { id: userId } })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 
-//   }
+  async findAll (): Promise<IUser[]> {
+    try {
+      return await this.userRepository.findAll() as IUser[]
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 
-//   async findAll () {
-
-//   }
-
-//   async findById () {
-
-//   }
-// }
+  async findById (userId: number): Promise<IUser> {
+    try {
+      return await this.userRepository.findByPk(userId) as IUser
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+}

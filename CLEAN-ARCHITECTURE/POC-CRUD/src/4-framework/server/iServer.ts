@@ -25,7 +25,7 @@ export class ServerExpress implements IServerExpress {
     this.routes()
   }
 
-  public connection (): void {
+  connection (): void {
     this.app.listen(port, () => {
       console.log('SERVER ON')
       console.log(`Listen in http://localhost:${port}`)

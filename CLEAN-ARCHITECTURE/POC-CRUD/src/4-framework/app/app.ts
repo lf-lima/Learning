@@ -1,6 +1,6 @@
 import { IApp } from './iApp'
 import { IServer } from '../server/iServer'
-import { IDBConnection } from '../database/connection'
+import { IDBConnection } from '../database/base/iConnection'
 
 export class App implements IApp {
   public server: IServer
@@ -12,7 +12,7 @@ export class App implements IApp {
     this.database()
   }
 
-  public async database (): Promise<void> {
+  async database (): Promise<void> {
     await this.dbConnection.connect()
   }
 }

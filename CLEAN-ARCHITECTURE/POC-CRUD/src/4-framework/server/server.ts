@@ -1,9 +1,8 @@
 import { App } from '../app/app'
 import { ServerExpress } from './iServer'
-import { DBConnection } from '../database/connection'
-import { MysqlConfig } from '../database/config'
-console.log(new DBConnection(new MysqlConfig()))
+import { SequelizeConnection } from '../database/sequelize/connection'
+import { SequelizeMysqlConfig } from '../database/sequelize/config'
 
-const app = new App(new ServerExpress(), new DBConnection(new MysqlConfig()))
+const app = new App(new ServerExpress(), new SequelizeConnection(new SequelizeMysqlConfig()))
 
 app.server.connection()
