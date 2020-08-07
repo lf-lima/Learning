@@ -1,25 +1,21 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import { IBaseServer } from '../base/iBaseServer'
+import { port } from '../../const/port'
+import { IMainExpressRouter, MainExpressRouter } from '../../routers/mainRouter'
 
-const port = 3333
-
-export interface IServer {
-  app: any,
-  connection(): void
-  routes(): void
-  middlewares(): void
-}
-
-export interface IServerExpress extends IServer{
+export interface IExpressServer extends IBaseServer{
   app: express.Application
 }
 
-export class ServerExpress implements IServerExpress {
+export class ExpressServer implements IExpressServer {
   public app: express.Application
+  public mainRouter: IMainExpressRouter
 
   constructor () {
     this.app = express()
+    this.mainRouter = new MainExpressRouter()
 
     this.middlewares()
     this.routes()
@@ -39,6 +35,8 @@ export class ServerExpress implements IServerExpress {
   }
 
   public routes (): void {
-    console.log('routes')
+    this.mainRouter.routing()
+
+    this.app.use(this.mainRouter.router)
   }
 }

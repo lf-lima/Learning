@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
-import { ISequelizeDBConfig } from './config'
+import { ISequelizeDBConfig } from './sequelizeConfig'
 import { IDBConnection } from '../base/iConnection'
 
 export class SequelizeConnection implements IDBConnection {

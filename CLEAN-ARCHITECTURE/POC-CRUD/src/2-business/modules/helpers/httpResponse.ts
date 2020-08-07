@@ -1,8 +1,7 @@
 export interface IHttpResponse<T> {
   statusCode: number,
   message: string,
-  body: T,
-  hasError: boolean
+  body: T
 }
 
 export class HttpResponse<T> implements IHttpResponse<T> {
@@ -12,5 +11,7 @@ export class HttpResponse<T> implements IHttpResponse<T> {
 
   public body!: T
 
-  public hasError!: boolean
+  constructor (obj: Partial<HttpResponse<T>>) {
+    Object.assign(this, obj)
+  }
 }

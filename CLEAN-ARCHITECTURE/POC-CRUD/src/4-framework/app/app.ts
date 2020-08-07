@@ -1,12 +1,12 @@
 import { IApp } from './iApp'
-import { IServer } from '../server/iServer'
+import { IBaseServer } from '../server/base/iBaseServer'
 import { IDBConnection } from '../database/base/iConnection'
 
 export class App implements IApp {
-  public server: IServer
+  public server: IBaseServer
   public dbConnection: IDBConnection
 
-  constructor (server: IServer, dbConnection: IDBConnection) {
+  constructor (server: IBaseServer, dbConnection: IDBConnection) {
     this.server = server
     this.dbConnection = dbConnection
     this.database()

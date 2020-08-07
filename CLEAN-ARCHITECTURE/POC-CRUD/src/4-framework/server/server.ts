@@ -1,8 +1,8 @@
 import { App } from '../app/app'
-import { ServerExpress } from './iServer'
-import { SequelizeConnection } from '../database/sequelize/connection'
-import { SequelizeMysqlConfig } from '../database/sequelize/config'
+import { ExpressServer } from './express/expressServer'
+import { SequelizeConnection } from '../database/sequelize/sequelizeConnection'
+import { SequelizeMysqlConfig } from '../database/sequelize/sequelizeConfig'
 
-const app = new App(new ServerExpress(), new SequelizeConnection(new SequelizeMysqlConfig()))
+const app = new App(new ExpressServer(), new SequelizeConnection(new SequelizeMysqlConfig()))
 
 app.server.connection()

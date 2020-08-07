@@ -3,5 +3,9 @@ export interface IHttpRequest {
 }
 
 export class HttpRequest implements IHttpRequest {
-  public body: any
+  public body!: any
+
+  constructor (obj: Partial<HttpRequest>) {
+    Object.assign(this, obj)
+  }
 }
