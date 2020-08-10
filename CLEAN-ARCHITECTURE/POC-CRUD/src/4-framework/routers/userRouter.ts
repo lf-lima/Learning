@@ -1,4 +1,7 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
+import { CreateUserUseCase } from '../../2-business/useCases/user/createUserUseCase'
+import { IBaseOperationAdapter } from '../../3-gateway/operations/adapter/base/iBaseOperationAdapter'
+import { CreateUserOperation } from '../../3-gateway/operations/user/createUserOperation'
 import User from '../models/sequelize/user.model'
 import { UserRepository } from '../repositories/userRepository'
 import { ExpressRouter } from './express/expressRouter'
@@ -6,12 +9,13 @@ import { ExpressRouter } from './express/expressRouter'
 export class UserRouter extends ExpressRouter {
   public router!: Router
   public route!: string
+  public operationAdapter!: IBaseOperationAdapter
 
   constructor () {
     super('/user')
 
-    this.router.post('/', async (req: Request, res: Response) => {
-      return res.status(200).json({ user: await new UserRepository(User).create({ email: 'luiz@g.com', password: '123' }) })
-    })
+    this.router.post('/', this.operationAdapter.adapt(
+      new CreateUserOperation(new CreateUserUseCase(new UserRepository(User))))
+    )
   }
 }

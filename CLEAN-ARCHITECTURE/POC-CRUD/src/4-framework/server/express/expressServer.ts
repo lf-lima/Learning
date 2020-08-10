@@ -3,7 +3,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import { IBaseServer } from '../base/iBaseServer'
 import { port } from '../../const/port'
-import { IMainExpressRouter, MainExpressRouter } from '../../routers/mainRouter'
+import { IMainExpressRouter, MainExpressRouter } from '../../routers/express/mainExpressRouter'
 
 export interface IExpressServer extends IBaseServer{
   app: express.Application

@@ -1,4 +1,4 @@
-import { IMainRouter } from '../../routers/mainRouter'
+import { IMainRouter } from '../../routers/base/iMainRouter'
 
 export interface IBaseServer {
   app: any,

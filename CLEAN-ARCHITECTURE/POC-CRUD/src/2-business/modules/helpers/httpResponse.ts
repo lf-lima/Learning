@@ -1,17 +1,17 @@
-export interface IHttpResponse<T> {
+export interface IHttpResponse {
   statusCode: number,
   message: string,
-  body: T
+  body: any
 }
 
-export class HttpResponse<T> implements IHttpResponse<T> {
+export class HttpResponse implements IHttpResponse {
   public statusCode!: number
 
   public message!: string
 
-  public body!: T
+  public body!: any
 
-  constructor (obj: Partial<HttpResponse<T>>) {
+  constructor (obj: Partial<HttpResponse>) {
     Object.assign(this, obj)
   }
 }

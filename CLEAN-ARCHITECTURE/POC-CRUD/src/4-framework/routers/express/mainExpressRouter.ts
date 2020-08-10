@@ -1,12 +1,7 @@
 import { Router } from 'express'
-import { routers } from '../const/routers'
-import { IBaseRouter } from './base/iBaseRouter'
-
-export interface IMainRouter {
-  router: any
-  routers: IBaseRouter[]
-  routing(): void
-}
+import { routers } from '../../const/routers'
+import { IBaseRouter } from '../base/iBaseRouter'
+import { IMainRouter } from '../base/iMainRouter'
 
 export interface IMainExpressRouter extends IMainRouter {
   router: Router
