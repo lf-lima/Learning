@@ -1,26 +1,45 @@
-import { IHttpRequest } from '../../../2-business/modules/helpers/httpRequest'
-import { HttpResponse, IHttpResponse } from '../../../2-business/modules/helpers/httpResponse'
-import { IBaseUseCase } from '../../../2-business/useCases/base/iBaseUseCase'
+import { CreateUserDTO } from '../../../2-business/dto/user'
+import { IHttpRequest } from '../../modules/http/httpRequest'
+import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse, IHttpResponse } from '../../modules/http/httpResponse'
+import { InputCreateUser } from '../../serializers/user/inputCreateUser'
 import { IBaseOperation } from '../base/iBaseOperation'
+import { ICreateUserUseCase } from '../../../2-business/useCases/user/createUserUseCase'
+import { IFindUserByEmailUseCase } from '../../../2-business/useCases/user/findUserByEmailUseCase'
 
 export interface ICreateUserOperation extends IBaseOperation {
-  useCase: IBaseUseCase
+  findUserByEmailUseCase: IFindUserByEmailUseCase
 }
 
 export class CreateUserOperation implements ICreateUserOperation {
-  public useCase!: IBaseUseCase
+  public useCase!: ICreateUserUseCase
+  public findUserByEmailUseCase!: IFindUserByEmailUseCase
 
-  constructor (useCase: IBaseUseCase) {
+  constructor (useCase: ICreateUserUseCase, findUserByEmailUseCase: IFindUserByEmailUseCase) {
     this.useCase = useCase
+    this.findUserByEmailUseCase = findUserByEmailUseCase
   }
 
   async run (httpRequest: IHttpRequest): Promise<IHttpResponse> {
     try {
-      const dto = httpRequest.body
-      // valida
-      return new HttpResponse({ statusCode: 200, message: 'Success', body: await this.useCase.run(dto) })
+      const inputCreateUser = new InputCreateUser(httpRequest.body)
+
+      const errors = await inputCreateUser.validate()
+
+      if (inputCreateUser.hasError) {
+        return new HttpBadRequestResponse(errors)
+      }
+
+      const dto = new CreateUserDTO(httpRequest.body)
+
+      const userAlreadyExists = await this.findUserByEmailUseCase.run({ email: dto.email })
+
+      if (userAlreadyExists) {
+        return new HttpBadRequestResponse('User Already Exists')
+      }
+
+      return new HttpSuccessResponse(await this.useCase.run(dto))
     } catch (error) {
-      return new HttpResponse({ statusCode: 500, message: 'Server Internal Error', body: error })
+      return new HttpInternalErrorResponse(error.message)
     }
   }
 }

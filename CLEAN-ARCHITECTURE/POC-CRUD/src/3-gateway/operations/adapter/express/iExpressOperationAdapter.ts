@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { HttpRequest } from '../../../../2-business/modules/helpers/httpRequest'
-import { IHttpResponse } from '../../../../2-business/modules/helpers/httpResponse'
+import { HttpRequest } from '../../../modules/http/httpRequest'
+import { IHttpResponse } from '../../../modules/http/httpResponse'
 import { IBaseOperation } from '../../base/iBaseOperation'
 import { IBaseOperationAdapter } from '../base/iBaseOperationAdapter'
 

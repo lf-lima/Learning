@@ -50,4 +50,12 @@ export class UserRepository implements IUserRepository {
       throw new Error(error)
     }
   }
+
+  async findByEmail (userEmail: string): Promise<IUser> {
+    try {
+      return await this.userRepository.findOne({ where: { email: userEmail } }) as IUser
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 }

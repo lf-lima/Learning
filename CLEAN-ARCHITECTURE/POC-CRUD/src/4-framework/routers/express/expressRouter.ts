@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { ExpressOperationAdapter, IExpressOperationAdapter } from '../../../3-gateway/operations/adapter/express/iExpressControllerAdapter'
+import { ExpressOperationAdapter, IExpressOperationAdapter } from '../../../3-gateway/operations/adapter/express/iExpressOperationAdapter'
 import { IBaseRouter } from '../base/iBaseRouter'
 
 export interface IExpressRouter extends IBaseRouter {

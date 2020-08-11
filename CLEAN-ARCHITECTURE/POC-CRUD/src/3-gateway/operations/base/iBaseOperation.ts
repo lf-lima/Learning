@@ -1,5 +1,5 @@
-import { IHttpRequest } from '../../../2-business/modules/helpers/httpRequest'
-import { IHttpResponse } from '../../../2-business/modules/helpers/httpResponse'
+import { IHttpRequest } from '../../modules/http/httpRequest'
+import { IHttpResponse } from '../../modules/http/httpResponse'
 import { IBaseUseCase } from '../../../2-business/useCases/base/iBaseUseCase'
 
 export interface IBaseOperation {

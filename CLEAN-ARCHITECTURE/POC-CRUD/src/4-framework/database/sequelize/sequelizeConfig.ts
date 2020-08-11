@@ -11,8 +11,6 @@ class SequelizeDBConfig implements ISequelizeDBConfig {
 }
 
 export class SequelizeMysqlConfig extends SequelizeDBConfig {
-  public options!: SequelizeOptions
-
   constructor () {
     super()
     this.options.dialect = 'mysql'
