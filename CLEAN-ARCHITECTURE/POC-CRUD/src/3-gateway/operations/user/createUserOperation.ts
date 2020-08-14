@@ -1,12 +1,15 @@
-import { CreateUserDTO } from '../../../2-business/dto/user'
+import { CreateUserDTO, ICreateUserDTO } from '../../../2-business/dto/user'
 import { IHttpRequest } from '../../modules/http/httpRequest'
 import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse, IHttpResponse } from '../../modules/http/httpResponse'
 import { InputCreateUser } from '../../serializers/user/inputCreateUser'
 import { IBaseOperation } from '../base/iBaseOperation'
 import { ICreateUserUseCase } from '../../../2-business/useCases/user/createUserUseCase'
 import { IFindUserByEmailUseCase } from '../../../2-business/useCases/user/findUserByEmailUseCase'
+import { IUserRepository } from '../../../2-business/repositories/iUserRepository'
+import { IHttpResponseError } from '../../modules/errors/http/httpReponseErrors'
+import { IUser } from '../../../1-domain/entities/iUser'
 
-export interface ICreateUserOperation extends IBaseOperation {
+export interface ICreateUserOperation extends IBaseOperation<IUserRepository, ICreateUserDTO> {
   findUserByEmailUseCase: IFindUserByEmailUseCase
 }
 
@@ -19,7 +22,7 @@ export class CreateUserOperation implements ICreateUserOperation {
     this.findUserByEmailUseCase = findUserByEmailUseCase
   }
 
-  async run (httpRequest: IHttpRequest): Promise<IHttpResponse> {
+  async run (httpRequest: IHttpRequest<ICreateUserDTO>): Promise<IHttpResponse<IUser | IHttpResponseError[]>> {
     try {
       const inputCreateUser = new InputCreateUser(httpRequest.body)
 
@@ -34,7 +37,10 @@ export class CreateUserOperation implements ICreateUserOperation {
       const userAlreadyExists = await this.findUserByEmailUseCase.run({ email: dto.email })
 
       if (userAlreadyExists) {
-        return new HttpBadRequestResponse('User Already Exists')
+        return new HttpBadRequestResponse([{
+          name: 'user',
+          message: { userExists: 'User Already Exists' }
+        }])
       }
 
       return new HttpSuccessResponse(await this.useCase.run(dto))

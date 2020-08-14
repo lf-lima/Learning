@@ -3,16 +3,13 @@ import { IFindUserByEmailDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
 import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export interface IFindUserByEmailUseCase extends IBaseUseCase {
-  repository: IUserRepository
-  run(dto: IFindUserByEmailDTO): Promise<IUser>
-}
+export type IFindUserByEmailUseCase = IBaseUseCase<IUserRepository, IFindUserByEmailDTO, IUser>
 
 export class FindUserByEmailUseCase implements IFindUserByEmailUseCase {
   public repository!: IUserRepository
 
-  constructor (repository: IUserRepository) {
-    this.repository = repository
+  constructor (repo: IUserRepository) {
+    this.repository = repo
   }
 
   async run (dto: IFindUserByEmailDTO): Promise<IUser> {

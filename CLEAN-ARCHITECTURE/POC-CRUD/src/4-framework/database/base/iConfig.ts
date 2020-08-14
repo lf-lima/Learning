@@ -1,3 +1,3 @@
-export interface IDBConfig {
-  options: any
+export interface IDBConfig<TConfig> {
+  options: TConfig
 }

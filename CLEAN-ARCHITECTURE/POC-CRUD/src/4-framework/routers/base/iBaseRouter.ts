@@ -1,7 +1,4 @@
-import { IBaseOperationAdapter } from '../../../3-gateway/operations/adapter/base/iBaseOperationAdapter'
-
-export interface IBaseRouter {
-  router: any
+export interface IBaseRouter<TRouter> {
+  router: TRouter
   route: string
-  operationAdapter: IBaseOperationAdapter
 }

@@ -3,13 +3,11 @@ import { routers } from '../../const/routers'
 import { IBaseRouter } from '../base/iBaseRouter'
 import { IMainRouter } from '../base/iMainRouter'
 
-export interface IMainExpressRouter extends IMainRouter {
-  router: Router
-}
+export type IMainExpressRouter = IMainRouter<Router>
 
 export class MainExpressRouter implements IMainExpressRouter {
   public router!: Router
-  public routers!: IBaseRouter[]
+  public routers!: IBaseRouter<Router>[]
 
   constructor () {
     this.router = Router()

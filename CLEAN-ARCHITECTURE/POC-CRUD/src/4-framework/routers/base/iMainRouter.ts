@@ -1,7 +1,7 @@
 import { IBaseRouter } from '../base/iBaseRouter'
 
-export interface IMainRouter {
-  router: any
-  routers: IBaseRouter[]
+export interface IMainRouter<TRouter> {
+  router: TRouter
+  routers: IBaseRouter<TRouter>[]
   routing(): void
 }

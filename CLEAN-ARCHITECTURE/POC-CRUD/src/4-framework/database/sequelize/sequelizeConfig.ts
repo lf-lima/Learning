@@ -2,9 +2,7 @@ import { SequelizeOptions } from 'sequelize-typescript'
 import { baseSequelizeOptions } from '../../const/databaseConfigs'
 import { IDBConfig } from '../base/iConfig'
 
-export interface ISequelizeDBConfig extends IDBConfig {
-  options: SequelizeOptions
-}
+export type ISequelizeDBConfig = IDBConfig<SequelizeOptions>
 
 class SequelizeDBConfig implements ISequelizeDBConfig {
   public options = baseSequelizeOptions

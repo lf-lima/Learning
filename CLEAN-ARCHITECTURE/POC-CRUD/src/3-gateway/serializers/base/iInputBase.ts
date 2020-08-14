@@ -1,4 +1,4 @@
-export interface IInputBase {
+export interface IInputBase<TError> {
   hasError: boolean
-  validate(): Promise<any[]>
+  validate(): Promise<TError[]>
 }
