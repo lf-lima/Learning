@@ -1,15 +1,14 @@
-import { CreateUserDTO, ICreateUserDTO } from '../../../2-business/dto/user'
+import { CreateUserDTO } from '../../../2-business/dto/user'
 import { IHttpRequest } from '../../modules/http/httpRequest'
 import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse, IHttpResponse } from '../../modules/http/httpResponse'
-import { InputCreateUser } from '../../serializers/user/inputCreateUser'
+import { IInputCreateUser, InputCreateUser } from '../../serializers/user/inputCreateUser'
 import { IBaseOperation } from '../base/iBaseOperation'
 import { ICreateUserUseCase } from '../../../2-business/useCases/user/createUserUseCase'
 import { IFindUserByEmailUseCase } from '../../../2-business/useCases/user/findUserByEmailUseCase'
-import { IUserRepository } from '../../../2-business/repositories/iUserRepository'
 import { IHttpResponseError } from '../../modules/errors/http/httpReponseErrors'
 import { IUser } from '../../../1-domain/entities/iUser'
 
-export interface ICreateUserOperation extends IBaseOperation<IUserRepository, ICreateUserDTO> {
+export interface ICreateUserOperation extends IBaseOperation<IInputCreateUser, IUser> {
   findUserByEmailUseCase: IFindUserByEmailUseCase
 }
 
@@ -22,7 +21,7 @@ export class CreateUserOperation implements ICreateUserOperation {
     this.findUserByEmailUseCase = findUserByEmailUseCase
   }
 
-  async run (httpRequest: IHttpRequest<ICreateUserDTO>): Promise<IHttpResponse<IUser | IHttpResponseError[]>> {
+  async run (httpRequest: IHttpRequest<IInputCreateUser>): Promise<IHttpResponse<IUser | IHttpResponseError[]>> {
     try {
       const inputCreateUser = new InputCreateUser(httpRequest.body)
 
@@ -39,13 +38,20 @@ export class CreateUserOperation implements ICreateUserOperation {
       if (userAlreadyExists) {
         return new HttpBadRequestResponse([{
           name: 'user',
-          message: { userExists: 'User Already Exists' }
+          message: {
+            userExists: 'User Already Exists in System'
+          }
         }])
       }
 
       return new HttpSuccessResponse(await this.useCase.run(dto))
     } catch (error) {
-      return new HttpInternalErrorResponse(error.message)
+      return new HttpInternalErrorResponse([{
+        name: 'error',
+        message: {
+          internalError: error.message
+        }
+      }])
     }
   }
 }

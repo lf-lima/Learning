@@ -1,5 +1,5 @@
 export interface IHttpRequest<TBody> {
-  body: TBody
+  body: TBody,
 }
 
 export class HttpRequest<TBody> implements IHttpRequest<TBody> {

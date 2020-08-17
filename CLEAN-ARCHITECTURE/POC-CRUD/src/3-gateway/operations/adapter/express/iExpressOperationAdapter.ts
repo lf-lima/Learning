@@ -6,25 +6,25 @@ import { IHttpResponse } from '../../../modules/http/httpResponse'
 import { IBaseOperation } from '../../base/iBaseOperation'
 import { IBaseOperationAdapter } from '../base/iBaseOperationAdapter'
 
-export interface IExpressOperationAdapter<TRepository, TDTO>
+export interface IExpressOperationAdapter<TDTO, TReturnUseCase>
   extends IBaseOperationAdapter<
-    TRepository,
     TDTO,
+    TReturnUseCase,
     (req: Request, res: Response) => Promise<Response<IHttpResponse<IBaseModel | IHttpResponseError[]>>>
   > {
-    adapt(operation: IBaseOperation<TRepository, TDTO>): (req: Request, res: Response) => Promise<
-                                                                                            Response<
-                                                                                              IHttpResponse<
-                                                                                              IBaseModel | IHttpResponseError[]
-                                                                                              >
-                                                                                            >
-                                                                                          >
+    adapt(operation: IBaseOperation<TDTO, TReturnUseCase>): (req: Request, res: Response) => Promise<
+                                                                                      Response<
+                                                                                        IHttpResponse<
+                                                                                          IBaseModel | IHttpResponseError[]
+                                                                                        >
+                                                                                      >
+                                                                                    >
 }
 
-export class ExpressOperationAdapter<TRepository, TDTO> implements IExpressOperationAdapter<TRepository, TDTO> {
-  adapt (operation: IBaseOperation<TRepository, TDTO>) {
+export class ExpressOperationAdapter<TDTO, TReturnUseCase> implements IExpressOperationAdapter<TDTO, TReturnUseCase> {
+  adapt (operation: IBaseOperation<TDTO, TReturnUseCase>) {
     return async (req: Request, res: Response): Promise<Response<IHttpResponse<IBaseModel | IHttpResponseError[]>>> => {
-      const httpRequest = new HttpRequest({ body: req.body })
+      const httpRequest = new HttpRequest({ body: { ...req.body, ...req.params } })
       const httpResponse = await operation.run(httpRequest)
 
       return res.status(httpResponse.statusCode).json(httpResponse)

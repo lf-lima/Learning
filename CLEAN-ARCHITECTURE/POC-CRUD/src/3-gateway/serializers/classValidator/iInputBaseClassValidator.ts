@@ -1,4 +1,4 @@
-import { validate, ValidationError } from 'class-validator'
+import { validate } from 'class-validator'
 import { IHttpResponseError } from '../../modules/errors/http/httpReponseErrors'
 import { IInputBase } from '../base/iInputBase'
 

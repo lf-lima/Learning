@@ -25,3 +25,37 @@ export class FindUserByEmailDTO implements IFindUserByEmailDTO {
     Object.assign(this, obj)
   }
 }
+
+// ==============================
+
+export interface IUpdateUserDTO {
+  userId: number
+  email?: string
+  password?: string
+  confirmPassword?: string
+}
+
+export class UpdateUserDTO implements IUpdateUserDTO {
+  public userId!: number
+  public email?: string
+  public password?: string
+  public confirmPassword?: string
+
+  constructor (obj: Partial<UpdateUserDTO>) {
+    Object.assign(this, obj)
+  }
+}
+
+// ===========================
+
+export interface IFindUserByIdDTO {
+  userId: number
+}
+
+export class FindUserByIdDTO implements IFindUserByIdDTO {
+  public userId!: number
+
+  constructor (obj: Partial<FindUserByIdDTO>) {
+    Object.assign(this, obj)
+  }
+}

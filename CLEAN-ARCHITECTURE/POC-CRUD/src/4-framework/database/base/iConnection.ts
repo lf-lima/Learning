@@ -1,6 +1,4 @@
-import { IDBConfig } from './iConfig'
-
-export interface IDBConnection {
-  config: IDBConfig
+export interface IDBConnection<TConfig> {
+  config: TConfig
   connect(): Promise<void>
 }

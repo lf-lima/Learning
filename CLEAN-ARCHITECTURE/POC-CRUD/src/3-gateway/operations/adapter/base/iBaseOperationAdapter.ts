@@ -1,5 +1,5 @@
 import { IBaseOperation } from '../../base/iBaseOperation'
 
-export interface IBaseOperationAdapter<TRepository, TDTO, TResponse> {
-  adapt(operation: IBaseOperation<TRepository, TDTO>): TResponse
+export interface IBaseOperationAdapter<TDTO, TReturnUseCase, TResponse> {
+  adapt(operation: IBaseOperation<TDTO, TReturnUseCase>): TResponse
 }

@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { Router } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { IBaseServer } from '../base/iBaseServer'
 import { port } from '../../const/port'
 import { IMainExpressRouter, MainExpressRouter } from '../../routers/express/mainExpressRouter'
 
-export interface IExpressServer extends IBaseServer{
+export interface IExpressServer extends IBaseServer<Router> {
   app: express.Application
 }
 

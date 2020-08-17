@@ -3,10 +3,10 @@ import { ICreateUserDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
 import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type ICreateUserUseCase = IBaseUseCase<IUserRepository, ICreateUserDTO, IUser>
+export type ICreateUserUseCase = IBaseUseCase<ICreateUserDTO, IUser>
 
 export class CreateUserUseCase implements ICreateUserUseCase {
-  public repository!: IUserRepository
+  readonly repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo

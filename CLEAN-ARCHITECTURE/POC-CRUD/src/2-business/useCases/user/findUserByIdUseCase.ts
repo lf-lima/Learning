@@ -1,20 +1,20 @@
 import { IUser } from '../../../1-domain/entities/iUser'
-import { IFindUserByEmailDTO } from '../../dto/user'
+import { IFindUserByIdDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
 import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type IFindUserByEmailUseCase = IBaseUseCase<IFindUserByEmailDTO, IUser>
+export type IFindUserByIdUseCase = IBaseUseCase<IFindUserByIdDTO, IUser>
 
-export class FindUserByEmailUseCase implements IFindUserByEmailUseCase {
+export class FindUserByIdUseCase implements IFindUserByIdUseCase {
   public repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo
   }
 
-  async run (dto: IFindUserByEmailDTO): Promise<IUser> {
+  async run (dto: IFindUserByIdDTO): Promise<IUser> {
     try {
-      return await this.repository.findByEmail(dto.email)
+      return await this.repository.findById(dto.userId)
     } catch (error) {
       throw new Error(error)
     }
