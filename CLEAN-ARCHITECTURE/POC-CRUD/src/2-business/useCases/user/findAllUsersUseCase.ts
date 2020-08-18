@@ -1,20 +1,19 @@
 import { IUser } from '../../../1-domain/entities/iUser'
-import { ICreateUserDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
 import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type ICreateUserUseCase = IBaseUseCase<ICreateUserDTO, IUser>
+export type IFindAllUsersUseCase = IBaseUseCase<undefined, IUser[]>
 
-export class CreateUserUseCase implements ICreateUserUseCase {
+export class FindAllUsersUseCase implements IFindAllUsersUseCase {
   public repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo
   }
 
-  async run (dto: ICreateUserDTO): Promise<IUser> {
+  async run (dto: undefined): Promise<IUser[]> {
     try {
-      return await this.repository.create(dto)
+      return this.repository.findAll()
     } catch (error) {
       throw new Error(error)
     }
