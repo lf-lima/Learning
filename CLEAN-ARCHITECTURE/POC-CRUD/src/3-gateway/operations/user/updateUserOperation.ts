@@ -1,5 +1,5 @@
 import { IUser } from '../../../1-domain/entities/iUser'
-import { UpdateUserDTO } from '../../../2-business/dto/user'
+import { FindUserByEmailDTO, FindUserByIdDTO, UpdateUserDTO } from '../../../2-business/dto/user'
 import { IFindUserByEmailUseCase } from '../../../2-business/useCases/user/findUserByEmailUseCase'
 import { IFindUserByIdUseCase } from '../../../2-business/useCases/user/findUserByIdUseCase'
 import { IUpdateUserUseCase } from '../../../2-business/useCases/user/updateUserUseCase'
@@ -38,9 +38,10 @@ export class UpdateUserOperation implements IUpdateUserOperation {
         return new HttpBadRequestResponse(errors)
       }
 
-      const dto = new UpdateUserDTO(httpRequest.body)
+      const updateUserDTO = new UpdateUserDTO(httpRequest.body)
+      const findUserByIdDTO = new FindUserByIdDTO({ userId: updateUserDTO.userId })
 
-      const user = await this.findUserByIdUseCase.run({ userId: dto.userId })
+      const user = await this.findUserByIdUseCase.run(findUserByIdDTO)
 
       if (!user) {
         return new HttpBadRequestResponse([{
@@ -51,10 +52,12 @@ export class UpdateUserOperation implements IUpdateUserOperation {
         }])
       }
 
-      if (dto.email) {
-        const userWithEmail = await this.findUserByEmailUseCase.run({ email: dto.email })
+      if (updateUserDTO.email) {
+        const findUserByEmailDTO = new FindUserByEmailDTO({ email: updateUserDTO.email })
 
-        if (userWithEmail && dto.email !== user.email) {
+        const userWithEmail = await this.findUserByEmailUseCase.run(findUserByEmailDTO)
+
+        if (userWithEmail && updateUserDTO.email !== user.email) {
           return new HttpBadRequestResponse([{
             name: 'user',
             message: {
@@ -64,7 +67,7 @@ export class UpdateUserOperation implements IUpdateUserOperation {
         }
       }
 
-      return new HttpSuccessResponse(await this.updateUserUseCase.run(dto))
+      return new HttpSuccessResponse(await this.updateUserUseCase.run(updateUserDTO))
     } catch (error) {
       return new HttpInternalErrorResponse([{
         name: 'error',

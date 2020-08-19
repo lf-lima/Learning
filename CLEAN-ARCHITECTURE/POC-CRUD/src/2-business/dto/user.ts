@@ -59,3 +59,17 @@ export class FindUserByIdDTO implements IFindUserByIdDTO {
     Object.assign(this, obj)
   }
 }
+
+// ============================
+
+export interface IDeleteUserDTO {
+  userId: number
+}
+
+export class DeleteUserDTO implements IDeleteUserDTO {
+  public userId!: number
+
+  constructor (obj: Partial<DeleteUserDTO>) {
+    Object.assign(this, obj)
+  }
+}

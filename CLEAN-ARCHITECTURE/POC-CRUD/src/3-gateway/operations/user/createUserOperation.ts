@@ -1,4 +1,4 @@
-import { CreateUserDTO } from '../../../2-business/dto/user'
+import { CreateUserDTO, FindUserByEmailDTO } from '../../../2-business/dto/user'
 import { IHttpRequest } from '../../modules/http/httpRequest'
 import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse, IHttpResponse } from '../../modules/http/httpResponse'
 import { IInputCreateUser, InputCreateUser } from '../../serializers/user/inputCreateUser'
@@ -29,9 +29,11 @@ export class CreateUserOperation implements ICreateUserOperation {
         return new HttpBadRequestResponse(errors)
       }
 
-      const dto = new CreateUserDTO(httpRequest.body)
+      const createUserDTO = new CreateUserDTO(httpRequest.body)
 
-      const userAlreadyExists = await this.findUserByEmailUseCase.run({ email: dto.email })
+      const findUserByEmailDTO = new FindUserByEmailDTO(httpRequest.body)
+
+      const userAlreadyExists = await this.findUserByEmailUseCase.run(findUserByEmailDTO)
 
       if (userAlreadyExists) {
         return new HttpBadRequestResponse([{
@@ -42,7 +44,7 @@ export class CreateUserOperation implements ICreateUserOperation {
         }])
       }
 
-      return new HttpSuccessResponse(await this.createUserUseCase.run(dto))
+      return new HttpSuccessResponse(await this.createUserUseCase.run(createUserDTO))
     } catch (error) {
       return new HttpInternalErrorResponse([{
         name: 'error',

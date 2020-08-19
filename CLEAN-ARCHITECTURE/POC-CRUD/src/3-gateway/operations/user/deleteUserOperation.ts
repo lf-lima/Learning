@@ -1,34 +1,36 @@
-import { IUser } from '../../../1-domain/entities/iUser'
-import { FindUserByIdDTO } from '../../../2-business/dto/user'
+import { DeleteUserDTO } from '../../../2-business/dto/user'
+import { IDeleteUserUseCase } from '../../../2-business/useCases/user/deleteUserUseCase'
 import { IFindUserByIdUseCase } from '../../../2-business/useCases/user/findUserByIdUseCase'
 import { IHttpResponseError } from '../../modules/errors/http/httpReponseErrors'
 import { IHttpRequest } from '../../modules/http/httpRequest'
 import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse, IHttpResponse } from '../../modules/http/httpResponse'
-import { IInputFindUserById, InputFindUserById } from '../../serializers/user/inputFindUserById'
+import { IInputDeleteUser, InputDeleteUser } from '../../serializers/user/inputDeleteUser'
 import { IBaseOperation } from '../base/iBaseOperation'
 
-export type IFindUserByIdOperation = IBaseOperation<IInputFindUserById, IUser>
+export type IDeleteUserOperation = IBaseOperation<IInputDeleteUser, string>
 
-export class FindUserByIdOperation implements IFindUserByIdOperation {
+export class DeleteUserOperation implements IDeleteUserOperation {
+  private deleteUserUseCase!: IDeleteUserUseCase
   private findUserByIdUseCase!: IFindUserByIdUseCase
 
-  constructor (findUserByIdUseCase: IFindUserByIdUseCase) {
+  constructor (deleteUserUseCase: IDeleteUserUseCase, findUserByIdUseCase: IFindUserByIdUseCase) {
+    this.deleteUserUseCase = deleteUserUseCase
     this.findUserByIdUseCase = findUserByIdUseCase
   }
 
-  async run (httpRequest: IHttpRequest<IInputFindUserById>): Promise<IHttpResponse<IUser | IHttpResponseError[]>> {
+  async run (httpRequest: IHttpRequest<IInputDeleteUser>): Promise<IHttpResponse<string | IHttpResponseError[]>> {
     try {
       httpRequest.body.userId = Number(httpRequest.body.userId)
 
-      const inputFindUserById = new InputFindUserById(httpRequest.body)
+      const inputDeleteUser = new InputDeleteUser(httpRequest.body)
 
-      const errors = await inputFindUserById.validate()
+      const errors = await inputDeleteUser.validate()
 
-      if (inputFindUserById.hasError) {
+      if (inputDeleteUser.hasError) {
         return new HttpBadRequestResponse(errors)
       }
 
-      const dto = new FindUserByIdDTO(httpRequest.body)
+      const dto = new DeleteUserDTO(httpRequest.body)
 
       const user = await this.findUserByIdUseCase.run(dto)
 
@@ -41,7 +43,9 @@ export class FindUserByIdOperation implements IFindUserByIdOperation {
         }])
       }
 
-      return new HttpSuccessResponse(user)
+      await this.deleteUserUseCase.run(dto)
+
+      return new HttpSuccessResponse('User Deleted')
     } catch (error) {
       return new HttpInternalErrorResponse([{
         name: 'error',
