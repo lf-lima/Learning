@@ -1,12 +1,13 @@
 import { IUser } from '../../../1-domain/entities/iUser'
 import { IUpdateUserDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
-import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type IUpdateUserUseCase = IBaseUseCase<IUpdateUserDTO, IUser>
+export interface IUpdateUserUseCase {
+  run(dto: IUpdateUserDTO): Promise<IUser>
+}
 
 export class UpdateUserUseCase implements IUpdateUserUseCase {
-  public repository!: IUserRepository
+  private repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo

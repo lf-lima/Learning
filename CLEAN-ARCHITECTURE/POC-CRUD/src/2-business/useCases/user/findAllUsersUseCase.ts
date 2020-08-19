@@ -1,17 +1,17 @@
 import { IUser } from '../../../1-domain/entities/iUser'
 import { IUserRepository } from '../../repositories/iUserRepository'
-import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type IFindAllUsersUseCase = IBaseUseCase<undefined, IUser[]>
-
+export interface IFindAllUsersUseCase {
+  run(): Promise<IUser[]>
+}
 export class FindAllUsersUseCase implements IFindAllUsersUseCase {
-  public repository!: IUserRepository
+  private repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo
   }
 
-  async run (dto: undefined): Promise<IUser[]> {
+  async run (): Promise<IUser[]> {
     try {
       return this.repository.findAll()
     } catch (error) {

@@ -9,22 +9,19 @@ import { HttpBadRequestResponse, HttpInternalErrorResponse, HttpSuccessResponse,
 import { IInputUpdateUser, InputUpdateUser } from '../../serializers/user/inputUpdateUser'
 import { IBaseOperation } from '../base/iBaseOperation'
 
-export interface IUpdateUserOperation extends IBaseOperation<IInputUpdateUser, IUser> {
-  findUserByEmailUseCase: IFindUserByEmailUseCase
-  findUserByIdUseCase: IFindUserByIdUseCase
-}
+export type IUpdateUserOperation = IBaseOperation<IInputUpdateUser, IUser>
 
 export class UpdateUserOperation implements IUpdateUserOperation {
-  public useCase!: IUpdateUserUseCase
-  public findUserByEmailUseCase!: IFindUserByEmailUseCase
-  public findUserByIdUseCase!: IFindUserByIdUseCase
+  private updateUserUseCase!: IUpdateUserUseCase
+  private findUserByEmailUseCase!: IFindUserByEmailUseCase
+  private findUserByIdUseCase!: IFindUserByIdUseCase
 
   constructor (
-    useCase: IUpdateUserUseCase,
+    updateUserUseCase: IUpdateUserUseCase,
     findUserByEmailUseCase: IFindUserByEmailUseCase,
     findUserByIdUseCase: IFindUserByIdUseCase
   ) {
-    this.useCase = useCase
+    this.updateUserUseCase = updateUserUseCase
     this.findUserByEmailUseCase = findUserByEmailUseCase
     this.findUserByIdUseCase = findUserByIdUseCase
   }
@@ -67,7 +64,7 @@ export class UpdateUserOperation implements IUpdateUserOperation {
         }
       }
 
-      return new HttpSuccessResponse(await this.useCase.run(dto))
+      return new HttpSuccessResponse(await this.updateUserUseCase.run(dto))
     } catch (error) {
       return new HttpInternalErrorResponse([{
         name: 'error',

@@ -1,12 +1,13 @@
 import { IUser } from '../../../1-domain/entities/iUser'
 import { IFindUserByEmailDTO } from '../../dto/user'
 import { IUserRepository } from '../../repositories/iUserRepository'
-import { IBaseUseCase } from '../base/iBaseUseCase'
 
-export type IFindUserByEmailUseCase = IBaseUseCase<IFindUserByEmailDTO, IUser>
+export interface IFindUserByEmailUseCase{
+  run(dto: IFindUserByEmailDTO): Promise<IUser>
+}
 
 export class FindUserByEmailUseCase implements IFindUserByEmailUseCase {
-  public repository!: IUserRepository
+  private repository!: IUserRepository
 
   constructor (repo: IUserRepository) {
     this.repository = repo
