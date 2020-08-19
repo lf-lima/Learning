@@ -6,6 +6,7 @@ import { UpdateUserUseCase } from '../../2-business/useCases/user/updateUserUseC
 import { ExpressOperationAdapter } from '../../3-gateway/operations/adapter/express/iExpressOperationAdapter'
 import { CreateUserOperation } from '../../3-gateway/operations/user/createUserOperation'
 import { FindAllUsersOperation } from '../../3-gateway/operations/user/findAllUsersOperation'
+import { FindUserByIdOperation } from '../../3-gateway/operations/user/findUserByIdOperation'
 import { UpdateUserOperation } from '../../3-gateway/operations/user/updateUserOperation'
 import User from '../models/sequelize/user.model'
 import { UserRepository } from '../repositories/userRepository'
@@ -18,6 +19,13 @@ export class UserRouter extends ExpressRouter {
     this.router.get('/', new ExpressOperationAdapter(
       new FindAllUsersOperation(
         new FindAllUsersUseCase(new UserRepository(User))
+      )
+    ).adapt()
+    )
+
+    this.router.get('/:userId', new ExpressOperationAdapter(
+      new FindUserByIdOperation(
+        new FindUserByIdUseCase(new UserRepository(User))
       )
     ).adapt()
     )

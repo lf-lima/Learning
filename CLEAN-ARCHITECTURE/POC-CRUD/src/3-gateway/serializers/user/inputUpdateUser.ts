@@ -1,4 +1,4 @@
-import { IsString, IsEmail, Length, IsOptional, IsNotEmpty, IsInt, IsNumber } from 'class-validator'
+import { IsString, IsEmail, Length, IsOptional, IsNotEmpty, IsInt, IsNumber, Min } from 'class-validator'
 import { Match } from '../base/decorators'
 import { IInputBaseClassValidator, InputBaseClassValidator } from '../classValidator/iInputBaseClassValidator'
 
@@ -13,6 +13,7 @@ export class InputUpdateUser extends InputBaseClassValidator implements IInputUp
   @IsNotEmpty()
   @IsNumber()
   @IsInt()
+  @Min(1)
   public userId!: number
 
   @IsOptional()
