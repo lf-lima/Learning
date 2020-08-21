@@ -36,22 +36,19 @@ export class CreateUserOperation implements ICreateUserOperation {
       const userAlreadyExists = await this.findUserByEmailUseCase.run(findUserByEmailDTO)
 
       if (userAlreadyExists) {
-        return new HttpBadRequestResponse([{
-          name: 'user',
-          message: {
-            userExists: 'User Already Exists in System'
+        return new HttpBadRequestResponse([
+          {
+            property: 'user',
+            messages: [
+              'User Already Exists in System'
+            ]
           }
-        }])
+        ])
       }
 
       return new HttpSuccessResponse(await this.createUserUseCase.run(createUserDTO))
     } catch (error) {
-      return new HttpInternalErrorResponse([{
-        name: 'error',
-        message: {
-          internalError: error.message
-        }
-      }])
+      return new HttpInternalErrorResponse(error.message)
     }
   }
 }

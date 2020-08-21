@@ -18,12 +18,7 @@ export class FindAllUsersOperation implements IFindAllUsersOperation {
     try {
       return new HttpSuccessResponse(await this.findAllUsersUseCase.run())
     } catch (error) {
-      return new HttpInternalErrorResponse([{
-        name: 'error',
-        message: {
-          internalError: error.message
-        }
-      }])
+      return new HttpInternalErrorResponse(error.message)
     }
   }
 }

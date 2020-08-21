@@ -30,8 +30,18 @@ export class HttpSuccessResponse<TBody> extends HttpResponse<TBody> {
 
 export type IHttpInternalErrorResponse = IHttpResponse<IHttpResponseError[]>
 export class HttpInternalErrorResponse extends HttpResponse<IHttpResponseError[]> {
-  constructor (body: IHttpResponseError[]) {
-    super({ statusCode: 500, message: 'Server Internal Error', hasError: true, body })
+  constructor (errorMessage: string) {
+    super({
+      statusCode: 500,
+      message: 'Server Internal Error',
+      hasError: true,
+      body: [{
+        property: 'internal',
+        messages: [
+          errorMessage
+        ]
+      }]
+    })
   }
 }
 

@@ -45,10 +45,10 @@ export class UpdateUserOperation implements IUpdateUserOperation {
 
       if (!user) {
         return new HttpBadRequestResponse([{
-          name: 'user',
-          message: {
-            userNotExists: 'User not Exists in System'
-          }
+          property: 'user',
+          messages: [
+            'User not Exists in System'
+          ]
         }])
       }
 
@@ -59,22 +59,17 @@ export class UpdateUserOperation implements IUpdateUserOperation {
 
         if (userWithEmail && updateUserDTO.email !== user.email) {
           return new HttpBadRequestResponse([{
-            name: 'user',
-            message: {
-              userExists: 'User Already Exists in System'
-            }
+            property: 'user',
+            messages: [
+              'User Already Exists in System'
+            ]
           }])
         }
       }
 
       return new HttpSuccessResponse(await this.updateUserUseCase.run(updateUserDTO))
     } catch (error) {
-      return new HttpInternalErrorResponse([{
-        name: 'error',
-        message: {
-          internalError: error.message
-        }
-      }])
+      return new HttpInternalErrorResponse(error.message)
     }
   }
 }

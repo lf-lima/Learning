@@ -34,21 +34,16 @@ export class FindUserByIdOperation implements IFindUserByIdOperation {
 
       if (!user) {
         return new HttpBadRequestResponse([{
-          name: 'userNotExists',
-          message: {
-            userNotExists: 'User not Exists in System'
-          }
+          property: 'user',
+          messages: [
+            'User not Exists in System'
+          ]
         }])
       }
 
       return new HttpSuccessResponse(user)
     } catch (error) {
-      return new HttpInternalErrorResponse([{
-        name: 'error',
-        message: {
-          internalError: error.message
-        }
-      }])
+      return new HttpInternalErrorResponse(error.message)
     }
   }
 }

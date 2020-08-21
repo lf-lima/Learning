@@ -1,4 +1,5 @@
 import { validate } from 'class-validator'
+import { IUser } from '../../../1-domain/entities/iUser'
 import { IHttpResponseError } from '../../modules/errors/http/httpReponseErrors'
 import { IInputBase } from '../base/iInputBase'
 
@@ -17,9 +18,18 @@ export class InputBaseClassValidator implements IInputBaseClassValidator {
       }
     }).then(errors => {
       for (const error of errors) {
+        const messages: string[] = []
+
+        const constraints = error.constraints as any
+        const keys = Object.keys(constraints)
+
+        for (const key of keys) {
+          messages.push(constraints[key])
+        }
+
         httpResponseErrors.push({
-          name: error.property,
-          message: error.constraints
+          property: error.property,
+          messages
         })
       }
     })

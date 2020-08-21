@@ -1,11 +1,11 @@
 export interface IHttpResponseError {
-  name: string,
-  message: { [type: string]: string; } | undefined
+  property: string,
+  messages: string[]
 }
 
-export class HttpResponseError {
-  public name!: string
-  public message!: string | string[]
+export class HttpResponseError implements IHttpResponseError {
+  public property!: string
+  public messages!: string[]
 
   constructor (obj: Partial<HttpResponseError>) {
     Object.assign(this, obj)
