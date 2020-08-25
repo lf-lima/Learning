@@ -1,0 +1,6 @@
+listAllUsers:
+  handler: functions/user/listAllUsers.handler
+  events:
+    - http:
+        method: GET
+        path: /users

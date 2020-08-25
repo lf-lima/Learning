@@ -1,0 +1,14 @@
+service: nodeless
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: sa-east-1
+
+plugins:
+  - serverless-offline
+
+functions:
+  - ${file(functions/helloWorld/_handlers.yml)}
+  - ${file(functions/user/_handlers.yml)}
+    
