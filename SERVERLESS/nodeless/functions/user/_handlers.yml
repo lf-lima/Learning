@@ -3,4 +3,18 @@ listAllUsers:
   events:
     - http:
         method: GET
-        path: /users
+        path: /user
+
+createUser:
+  handler: functions/user/createUser.handler
+  events:
+    - http:
+        method: POST
+        path: /user
+
+updateUser:
+  handler: functions/user/updateUser.handler
+  events:
+    - http:
+        method: PUT
+        path: /user/{userId}

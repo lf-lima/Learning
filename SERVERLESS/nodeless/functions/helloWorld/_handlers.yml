@@ -1,6 +1,0 @@
-helloWorld:
-  handler: functions/helloWorld/hello.handler
-  events:
-    - http:
-        method: GET
-        path: hello

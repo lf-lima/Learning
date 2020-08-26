@@ -9,6 +9,5 @@ plugins:
   - serverless-offline
 
 functions:
-  - ${file(functions/helloWorld/_handlers.yml)}
   - ${file(functions/user/_handlers.yml)}
     

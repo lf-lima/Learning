@@ -1,4 +1,5 @@
-module.exports.handler = async (event) => {
+module.exports.handler = async event => {
+  console.log('TESTE LOG');
   return {
     statusCode: 200,
     body: JSON.stringify({ 
