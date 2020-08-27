@@ -1,0 +1,1 @@
+{"version":3,"file":"routeGet.js","sourceRoot":"","sources":["../../../../src/functions/test/routeGet.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAEa,QAAA,OAAO,GAA2B,UAAM,KAAK;;QACxD,sBAAO;gBACL,UAAU,EAAE,GAAG;gBACf,IAAI,EAAE,IAAI,CAAC,SAAS,CAAC;oBACnB,OAAO,EAAE,WAAW;oBACpB,KAAK,EAAE;wBACL,iBAAiB;qBAClB;iBACF,CAAC;aACH,EAAA;;KACF,CAAA"}

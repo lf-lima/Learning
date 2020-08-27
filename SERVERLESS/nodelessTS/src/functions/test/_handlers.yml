@@ -1,0 +1,6 @@
+routeGet:
+  handler: src/functions/test/routeGet.handler
+  events:
+    - http: 
+        method: GET
+        path: routeGet
