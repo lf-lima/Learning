@@ -4,3 +4,10 @@ routeGet:
     - http: 
         method: GET
         path: routeGet
+
+routeGetAlb:
+  handler: src/functions/test/routeGetAlb.handler
+  events:
+    - http: 
+        method: GET
+        path: routeGetAlb
