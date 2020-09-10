@@ -1,4 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import dynamoose from 'dynamoose'
 
 export const handler: APIGatewayProxyHandler = async event => {
   return {

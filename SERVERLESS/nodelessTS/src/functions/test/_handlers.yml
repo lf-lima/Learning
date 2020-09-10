@@ -11,3 +11,10 @@ routeGetAlb:
     - http: 
         method: GET
         path: routeGetAlb
+
+routePost:
+  handler: src/functions/test/routePost.handler
+  events:
+    - http:
+        method: POST
+        path: routePost

@@ -27,6 +27,16 @@ provider:
 # you can overwrite defaults here
 #  stage: dev
 
+custom: 
+  dynamodb: 
+    start: 
+      port: 8000
+      inMemor: true
+      migration: true
+    migration:
+      dir: offline/migrations
+  
+
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -58,9 +68,11 @@ provider:
 plugins:
   - serverless-offline
   - serverless-plugin-typescript
+  - serverless-dynamodb-local
 
 functions:
   - ${file(src/functions/test/_handlers.yml)}
+  - ${file(src/functions/user/_handlers.yml)}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
